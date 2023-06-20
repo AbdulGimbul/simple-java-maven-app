@@ -27,5 +27,5 @@ java -jar target/${NAME}-${VERSION}.jar
 
 echo 'The following command prompts the deploy stage.'
 set -x
-# Add your deploy command here
+bash ./jenkins/scripts/kill.sh
 set +x
