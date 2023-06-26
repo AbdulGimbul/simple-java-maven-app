@@ -24,6 +24,23 @@ pipeline {
                 }
             }
         }
+        stage('Manual Approval') {
+            steps {
+                script {
+                    userInput = input(
+                        message: 'Lanjutkan ke tahap Deploy?',
+                        id: 'manualApproval',
+                        parameters: [
+                            choice(name: 'ACTION', choices: ['Proceed', 'Abort'], description: 'Select an action')
+                        ]
+                    )
+
+                    if (userInput.ACTION == 'Abort') {
+                        error("Deployment aborted by user")
+                    }
+                }
+            }
+        }
         stage('Deploy') {
             steps {
                 sh './jenkins/scripts/deliver.sh'
