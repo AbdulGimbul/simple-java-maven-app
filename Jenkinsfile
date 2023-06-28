@@ -26,27 +26,32 @@ pipeline {
         }
         stage('Manual Approval') {
             steps {
-                script {
-                    userInput = input(
-                        message: 'Lanjutkan ke tahap Deploy?',
-                        id: 'manualApproval',
-                        parameters: [
-                            choice(name: 'ACTION', choices: ['Proceed', 'Abort'], description: 'Select an action')
-                        ]
-                    )
-
-                    if (userInput.ACTION == 'Abort') {
-                        error("Deployment aborted by user")
-                    }
-                }
+                input(
+                    id: 'approval',
+                    message: 'Proceed with the next stage?',
+                    parameters: [
+                        [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Proceed?']
+                    ]
+                )
             }
         }
         stage('Deploy') {
+            when {
+                expression { return env.approval == 'true' }
+            }
             steps {
-                sh './jenkins/scripts/deliver.sh'
-		input message: 'Finished using the web site? (Click "Proceed" to continue)'
-                sh 'chmod +x ./jenkins/scripts/kill.sh'
-                sh './jenkins/scripts/kill.sh'
+                script {
+                    def timeoutDuration = 1
+                    def startTime = System.currentTimeMillis()
+                    def endTime = startTime + (timeoutDuration * 60 * 1000)
+
+                    while (System.currentTimeMillis() < endTime) {
+                        // Deployment steps here
+                        sh './jenkins/scripts/deliver.sh'
+
+                        sleep time: 1, unit: 'SECONDS'
+                    }
+                }
             }
         }
     }
