@@ -26,13 +26,7 @@ pipeline {
         }
         stage('Manual Approval') {
             steps {
-                input(
-                    id: 'approval',
-                    message: 'Proceed with the next stage?',
-                    parameters: [
-                        [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Proceed?']
-                    ]
-                )
+                input message: 'Proceed with the next stage?', parameters: [booleanParam(defaultValue: false, description: 'Proceed?')]
             }
         }
         stage('Deploy') {
