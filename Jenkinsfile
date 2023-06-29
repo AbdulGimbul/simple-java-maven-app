@@ -26,7 +26,7 @@ pipeline {
         }
         stage('Manual Approval') {
             steps {
-                input message: 'Proceed with the next stage?', parameters: [booleanParam(defaultValue: false, description: 'Proceed?')]
+                input message: 'Proceed with the next stage?', parameters: [booleanParam(defaultValue: false, description: 'Proceed?', name: 'approval')]
             }
         }
         stage('Deploy') {
