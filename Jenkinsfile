@@ -30,9 +30,8 @@ pipeline {
         stage('Manual Approval') {
             steps {
                 script {
-                    input message: 'Proceed with the next stage?', parameters: [params.boolean('approval')]
+                    input message: 'Proceed with the next stage?', parameters: [booleanParam(defaultValue: false, description: 'Proceed?', name: 'approval')]
                 }
-
             }
         }
         stage('Deploy') {
