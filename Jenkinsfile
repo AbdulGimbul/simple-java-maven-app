@@ -35,6 +35,7 @@ pipeline {
                         parameters: []
                     )
                     env.approval = userInput ? 'true' : 'false'
+                    echo "Approval value: ${env.approval}"
                 }
             }
         }
