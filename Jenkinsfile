@@ -8,9 +8,6 @@ pipeline {
             args '-v /root/.m2:/root/.m2'
         }
     }
-    parameters {
-        booleanParam(name: 'approval', defaultValue: false, description: 'Proceed?')
-    }
     stages {
         stage('Build') {
             steps {
