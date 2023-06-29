@@ -8,6 +8,9 @@ pipeline {
             args '-v /root/.m2:/root/.m2'
         }
     }
+    environment {
+        approval = ''
+    }
     stages {
         stage('Build') {
             steps {
