@@ -43,8 +43,6 @@ pipeline {
                 when {
                     expression { return env.approval == 'true' }
                 }
-            }
-            steps {
                 script {
                     def timeoutDuration = 1
                     def startTime = System.currentTimeMillis()
