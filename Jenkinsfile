@@ -50,8 +50,10 @@ pipeline {
                             // Deployment steps here
                             sh './jenkins/scripts/deliver.sh'
 
-                         sleep time: 1, unit: 'SECONDS'
+                            sleep time: 1, unit: 'SECONDS'
                         }
+                    } else {
+                        echo 'Skipping deployment stage.'
                     }
                 }
             }
