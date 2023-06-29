@@ -8,8 +8,8 @@ pipeline {
             args '-v /root/.m2:/root/.m2'
         }
     }
-    environment {
-        approval = ''
+    parameters {
+        booleanParam(name: 'approval', defaultValue: false, description: 'Proceed?')
     }
     stages {
         stage('Build') {
@@ -30,19 +30,17 @@ pipeline {
         stage('Manual Approval') {
             steps {
                 script {
-                    def userInput = input(
-                        message: 'Proceed with the next stage?',
-                        parameters: []
-                    )
-                    env.approval = userInput ? 'true' : 'false'
-                    echo "Approval value: ${env.approval}"
+                    input message: 'Proceed with the next stage?', parameters: [params.boolean('approval')]
                 }
+
             }
         }
         stage('Deploy') {
+            when {
+                expression { params.approval == true }
+            }
             steps {
                 script {
-                    if (env.approval == 'true') {
                         def timeoutDuration = 5
                         def startTime = System.currentTimeMillis()
                         def endTime = startTime + (timeoutDuration * 60 * 1000)
@@ -53,8 +51,6 @@ pipeline {
 
                             sleep time: 1, unit: 'SECONDS'
                         }
-                    } else {
-                        echo 'Skipping deployment stage.'
                     }
                 }
             }
