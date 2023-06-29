@@ -26,7 +26,13 @@ pipeline {
         }
         stage('Manual Approval') {
             steps {
-                input message: 'Proceed with the next stage?', parameters: [booleanParam(defaultValue: false, description: 'Proceed?', name: 'approval')]
+                script {
+                    def userInput = input(
+                        message: 'Proceed with the next stage?',
+                        parameters: []
+                    )
+                    env.approval = userInput ? 'true' : 'false'
+                }
             }
         }
         stage('Deploy') {
