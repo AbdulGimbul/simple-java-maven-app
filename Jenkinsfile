@@ -39,8 +39,10 @@ pipeline {
             }
         }
         stage('Deploy') {
-            when {
-                expression { return env.approval == 'true' }
+            steps {
+                when {
+                    expression { return env.approval == 'true' }
+                }
             }
             steps {
                 script {
