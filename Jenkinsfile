@@ -40,19 +40,18 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                when {
-                    expression { return env.approval == 'true' }
-                }
                 script {
-                    def timeoutDuration = 1
-                    def startTime = System.currentTimeMillis()
-                    def endTime = startTime + (timeoutDuration * 60 * 1000)
+                    if (env.approval == 'true') {
+                        def timeoutDuration = 1
+                        def startTime = System.currentTimeMillis()
+                        def endTime = startTime + (timeoutDuration * 60 * 1000)
 
-                    while (System.currentTimeMillis() < endTime) {
-                        // Deployment steps here
-                        sh './jenkins/scripts/deliver.sh'
+                        while (System.currentTimeMillis() < endTime) {
+                            // Deployment steps here
+                            sh './jenkins/scripts/deliver.sh'
 
-                        sleep time: 1, unit: 'SECONDS'
+                         sleep time: 1, unit: 'SECONDS'
+                        }
                     }
                 }
             }
