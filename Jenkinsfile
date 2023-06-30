@@ -25,28 +25,18 @@ pipeline {
             }
         }
         stage('Manual Approval') {
-            steps {
-                script {
-                    input message: 'Proceed with the next stage?', parameters: [booleanParam(defaultValue: false, description: 'Proceed?', name: 'approval')]
-                }
+            input {
+                message "Lanjutkan ke deploy?"
+                ok "Yes, of course"
             }
         }
         stage('Deploy') {
-            when {
-                expression { params.approval == true }
-            }
             steps {
                 script {
-                        def timeoutDuration = 1
-                        def startTime = System.currentTimeMillis()
-                        def endTime = startTime + (timeoutDuration * 60 * 1000)
-
-                        while (System.currentTimeMillis() < endTime) {
-                            // Deployment steps here
                             sh './jenkins/scripts/deliver.sh'
 
-                            sleep time: 1, unit: 'SECONDS'
-                        }
+                            sleep(60)
+
                     }
                 }
             }
