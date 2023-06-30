@@ -29,6 +29,9 @@ pipeline {
                 message "Lanjutkan ke deploy?"
                 ok "Yes, of course"
             }
+            steps {
+                echo "Let's go"
+            }
         }
         stage('Deploy') {
             steps {
