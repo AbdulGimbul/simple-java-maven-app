@@ -37,7 +37,7 @@ pipeline {
             }
             steps {
                 script {
-                        def timeoutDuration = 5
+                        def timeoutDuration = 1
                         def startTime = System.currentTimeMillis()
                         def endTime = startTime + (timeoutDuration * 60 * 1000)
 
