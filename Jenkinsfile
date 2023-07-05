@@ -12,7 +12,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'mvn -B -DskipTests clean package'
-		sh 'docker build -t simple-java-app .'
+		        sh 'docker build -t simple-java-app .'
             }
         }
         stage('Test') {
@@ -37,7 +37,10 @@ pipeline {
         stage('Deploy') {
 	    agent any
             steps {
-                
+                sshagent(['your-ssh-credentials']) {
+                    sh 'ssh -o StrictHostKeyChecking=no user@your-ec2-instance-ip "bash -s" < ./jenkins/scripts/deliver.sh'
+                }
+                sleep 60
             }
         }
     }
