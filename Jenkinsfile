@@ -4,11 +4,9 @@ pipeline {
     }
     agent {
         docker {
-            image 'maven:3.9.0'
+            image 'maven:3.9.0-openjdk-11-slim'
             args '-p 3000:3000'
             args '-v /root/.m2:/root/.m2'
-            // Install openssh-client inside the Docker container
-            args 'apt-get update && apt-get install -y openssh-client'
         }
     }
     stages {
