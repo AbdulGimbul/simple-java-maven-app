@@ -37,6 +37,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
+                docker exec -i $(docker ps -q) sh -c 'apt-get update && apt-get install -y openssh-client'
                     ssh -o StrictHostKeyChecking=no \
                         -i "./jenkins/scripts/java-simple-app.pem" \
                         ec2-user@ec2-52-74-163-106.ap-southeast-1.compute.amazonaws.com \
