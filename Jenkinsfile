@@ -34,8 +34,8 @@ pipeline {
         stage('Manual Approval') {
             steps {
                 input {
-                    message "Lanjutkan ke deploy?"
-                    ok "Yes, of course"
+                    message "Proceed with the deployment?"
+                    ok "Yes, proceed"
                 }
                 echo "Let's go"
             }
