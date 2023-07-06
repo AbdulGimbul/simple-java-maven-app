@@ -13,6 +13,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'mvn -B -DskipTests clean package'
+                sh 'apt-get update && apt-get install -y openssh-client'
             }
         }
         stage('Test') {
