@@ -7,6 +7,8 @@ pipeline {
             image 'maven:3.9.0'
             args '-p 3000:3000'
             args '-v /root/.m2:/root/.m2'
+            // Install openssh-client inside the Docker container
+            args 'apt-get update && apt-get install -y openssh-client'
         }
     }
     stages {
@@ -37,7 +39,6 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                docker exec -i $(docker ps -q) sh -c 'apt-get update && apt-get install -y openssh-client'
                     ssh -o StrictHostKeyChecking=no \
                         -i "./jenkins/scripts/java-simple-app.pem" \
                         ec2-user@ec2-52-74-163-106.ap-southeast-1.compute.amazonaws.com \
