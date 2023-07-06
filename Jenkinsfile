@@ -2,18 +2,12 @@ pipeline {
     triggers {
         pollSCM('*/2 * * * *')
     }
-    agent {
-        docker {
-            image 'maven:3.9.0'
-            args '-p 3000:3000'
-            args '-v /root/.m2:/root/.m2'
-        }
-    }
+    agent any
+
     stages {
         stage('Build') {
             steps {
                 sh 'mvn -B -DskipTests clean package'
-		        sh 'docker build -t simple-java-app .'
             }
         }
         stage('Test') {
@@ -26,24 +20,35 @@ pipeline {
                 }
             }
         }
-        stage('Manual Approval') {
-            input {
-                message "Lanjutkan ke deploy?"
-                ok "Yes, of course"
+        stage('Build Docker Image') {
+            agent {
+                docker {
+                    image 'maven:3.9.0'
+                    args '-v /root/.m2:/root/.m2'
+                }
             }
             steps {
+                sh 'docker build -t your-image-name .'
+            }
+        }
+        stage('Manual Approval') {
+            steps {
+                input {
+                    message "Lanjutkan ke deploy?"
+                    ok "Yes, of course"
+                }
                 echo "Let's go"
             }
         }
-        stage('Deploy') {
-	    agent any
+        stage('Deploy to EC2') {
+            agent any
             steps {
                 sshagent(['your-ssh-credentials']) {
-                    sh 'ssh -o StrictHostKeyChecking=no user@your-ec2-instance-ip "bash -s" < ./jenkins/scripts/deliver.sh'
+                    sh 'scp -i path/to/keypair.pem your-image-name user@your-ec2-instance-ip:/home/user/your-image-name'
+                    sh 'ssh -o StrictHostKeyChecking=no -i path/to/keypair.pem user@your-ec2-instance-ip "docker load -i /home/user/your-image-name"'
+                    sh 'ssh -o StrictHostKeyChecking=no -i path/to/keypair.pem user@your-ec2-instance-ip "docker run -d --name your-container-name your-image-name"'
                 }
-                sleep 60
             }
         }
     }
 }
-
