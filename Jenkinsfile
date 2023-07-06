@@ -36,6 +36,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
+                sh 'chmod 400 ./jenkins/scripts/java-simple-app.pem'
                 sh '''
                     ssh -o StrictHostKeyChecking=no \
                         -i "./jenkins/scripts/java-simple-app.pem" \
