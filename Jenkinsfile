@@ -13,10 +13,6 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'mvn -B -DskipTests clean package'
-		        docker {
-		            sh 'docker build -t simple-java-app .'
-		            args '-p 3000:3000'
-		        }
             }
         }
         stage('Test') {
