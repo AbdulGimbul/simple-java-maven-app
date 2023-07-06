@@ -39,10 +39,7 @@ pipeline {
                 script {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-to-aws')]) {
                         sh '''
-                            ssh -o StrictHostKeyChecking=no \
-                                -i "./jenkins/scripts/java-simple-app.pem" \
-                                ec2-user@ec2-52-74-163-106.ap-southeast-1.compute.amazonaws.com \
-                                "bash -s" < ./jenkins/scripts/deliver.sh
+                        "bash -s" < ./jenkins/scripts/deliver.sh
                         '''
                     }
                 }
