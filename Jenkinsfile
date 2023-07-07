@@ -15,6 +15,11 @@ pipeline {
                 sh 'mvn -B -DskipTests clean package'
             }
         }
+        stage('Dockerize') {
+            steps {
+                sh 'docker build -t abdl00/simple-java-app .'
+            }
+        }
         stage('Test') {
             steps {
                 sh 'mvn test'
@@ -34,6 +39,11 @@ pipeline {
                 echo "Let's go"
             }
         }
+        stage('Push') {
+            steps {
+                sh 'docker push abdl00/simple-java-app'
+            }
+        }
         stage('Deploy') {
             steps {
                 sh 'chmod 400 ./jenkins/scripts/java-simple-app.pem'
@@ -41,11 +51,10 @@ pipeline {
                     ssh -o StrictHostKeyChecking=no \
                         -i "./jenkins/scripts/java-simple-app.pem" \
                         ec2-user@ec2-52-74-163-106.ap-southeast-1.compute.amazonaws.com \
-                        "bash -s" < ./jenkins/scripts/deliver.sh
+                        "bash -s" < ./jenkins/scripts/deploy.sh
                 '''
                 sleep 60
             }
         }
     }
 }
-
