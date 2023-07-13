@@ -18,7 +18,7 @@ pipeline {
         }
         stage('Dockerize') {
             steps {
-                sh 'sudo docker build -t abdl00/simple-java-app .'
+                sh 'docker build -t abdl00/simple-java-app .'
             }
         }
         stage('Test') {
