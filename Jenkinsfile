@@ -10,7 +10,6 @@ pipeline {
             args '--privileged'
         }
     }
-    def customImage = ''
     stages {
         stage('Build') {
             steps {
@@ -22,7 +21,7 @@ pipeline {
                 echo 'Starting to build docker image'
 
                 script {
-                    customImage = docker.build("abdl00/simple-java-app")
+                    def customImage = docker.build("abdl00/simple-java-app")
                 }
             }
         }
@@ -47,7 +46,7 @@ pipeline {
         }
         stage('Push') {
             steps {
-                customImage.push()
+                echo "push"
             }
         }
         stage('Deploy') {
