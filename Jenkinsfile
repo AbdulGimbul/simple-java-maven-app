@@ -4,7 +4,8 @@ pipeline {
     }
     agent {
         docker {
-            image 'maven:3.9.0'
+            image 'maven:3.8.6-openjdk-11'
+            args '-p 3000:3000'
             args '-v /root/.m2:/root/.m2 -v /usr/bin/ssh:/usr/bin/ssh'
         }
     }
@@ -46,7 +47,7 @@ pipeline {
                 sh '''
                     ssh -o StrictHostKeyChecking=no \
                         -i "./jenkins/scripts/abdl_aws_key.pem" \
-                        ec2-user@ec2-52-74-163-106.ap-southeast-1.compute.amazonaws.com \
+                        app@ec2-13-229-99-205.ap-southeast-1.compute.amazonaws.com \
                         "bash -s" < ./jenkins/scripts/deploy.sh
                 '''
                 sleep 60
