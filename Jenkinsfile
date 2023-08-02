@@ -34,13 +34,13 @@ pipeline {
                 echo "Let's go"
             }
         }
-        //stage('Install SSH Client') {
-          //  steps {
+        stage('Install SSH Client') {
+            steps {
                 // Install openssh-client package on the Jenkins agent node
-            //    sh 'apt-get update -y'
-             //   sh 'apt-get install -y openssh-client'
-            //}
-       // }
+                sh 'apt-get update -y'
+                sh 'apt-get install -y openssh-client'
+            }
+        }
         stage('Deploy') {
             steps {
                 sh 'chmod 400 ./jenkins/scripts/abdl_aws_key.pem'
