@@ -11,15 +11,6 @@ pipeline {
                 sh 'mvn -B -DskipTests clean package'
             }
         }
-        stage('Dockerize') {
-            steps {
-                echo 'Starting to build docker image'
-
-                script {
-                    def customImage = docker.build("abdl00/simple-java-app")
-                }
-            }
-        }
         stage('Test') {
             steps {
                 sh 'mvn test'
@@ -39,17 +30,12 @@ pipeline {
                 echo "Let's go"
             }
         }
-        stage('Push') {
-            steps {
-                echo "push"
-            }
-        }
         stage('Deploy') {
             steps {
-                sh 'chmod 400 ./jenkins/scripts/java-simple-app.pem'
+                sh 'chmod 400 ./jenkins/scripts/abdl_aws_key.pem'
                 sh '''
                     ssh -o StrictHostKeyChecking=no \
-                        -i "./jenkins/scripts/java-simple-app.pem" \
+                        -i "./jenkins/scripts/abdl_aws_key.pem" \
                         ec2-user@ec2-52-74-163-106.ap-southeast-1.compute.amazonaws.com \
                         "bash -s" < ./jenkins/scripts/deploy.sh
                 '''
