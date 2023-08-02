@@ -44,6 +44,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh 'chmod 400 ./jenkins/scripts/abdl_aws_key.pem'
+                sshagent(credentials : ['jenkins-to-aws']){
                 sh '''
                     ssh -o StrictHostKeyChecking=no \
                         -i "./jenkins/scripts/abdl_aws_key.pem" \
@@ -51,6 +52,7 @@ pipeline {
                         "bash -s" < ./jenkins/scripts/deploy.sh
                 '''
                 sleep 60
+                }
             }
         }
     }
