@@ -1,7 +1,10 @@
 pipeline {
+    triggers {
+        pollSCM('*/2 * * * *')
+    }
     agent {
         docker {
-            image 'maven:3.9.3-eclipse-temurin-11'
+            image 'maven:3.9.0'
             args '-v /root/.m2:/root/.m2'
         }
     }

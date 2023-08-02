@@ -1,40 +1,26 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Assuming you have copied the JAR file to the server already.
-# Replace "your-app.jar" with the actual name of your JAR file.
-JAR_NAME="your-app.jar"
+echo 'The following Maven command installs your Maven-built Java application'
+echo 'into the local Maven repository, which will ultimately be stored in'
+echo 'Jenkins''s local Maven repository (and the "maven-repository" Docker data'
+echo 'volume).'
+set -x
+mvn jar:jar install:install help:evaluate -Dexpression=project.name
+set +x
 
-# Stop the running application (if any)
-echo "Stopping the currently running application (if any)..."
-sudo systemctl stop your-app.service
+echo 'The following complex command extracts the value of the <name/> element'
+echo 'within <project/> of your Java/Maven project''s "pom.xml" file.'
+set -x
+NAME=`mvn help:evaluate -Dexpression=project.name | grep "^[^\[]"`
+set +x
 
-# Replace "your-app" with the name of your systemd service.
-# Create a Systemd service for your Java app to manage it easily.
-echo "Creating or updating the Systemd service..."
-cat <<EOF | sudo tee /etc/systemd/system/your-app.service > /dev/null
-[Unit]
-Description=Your Java App
-After=network.target
+echo 'The following complex command behaves similarly to the previous one but'
+echo 'extracts the value of the <version/> element within <project/> instead.'
+set -x
+VERSION=`mvn help:evaluate -Dexpression=project.version | grep "^[^\[]"`
+set +x
 
-[Service]
-User=app
-WorkingDirectory=/path/to/your/app
-ExecStart=/usr/bin/java -jar ${JAR_NAME}
-SuccessExitStatus=143
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-# Reload the Systemd manager configuration
-sudo systemctl daemon-reload
-
-# Start the application
-echo "Starting the application..."
-sudo systemctl start your-app.service
-
-# Enable the service to start on boot
-echo "Enabling the service to start on boot..."
-sudo systemctl enable your-app.service
-
-echo "Deployment completed successfully!"
+echo 'The following command runs and outputs the execution of your Java'
+echo 'application (which Jenkins built using Maven) to the Jenkins UI.'
+set -x
+java -jar target/${NAME}-${VERSION}.jar
