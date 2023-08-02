@@ -6,7 +6,7 @@ pipeline {
         docker {
             image 'maven:3.9.3-eclipse-temurin-11'
             args '-p 3000:3000'
-            args '-v /root/.m2:/root/.m2 -v /usr/bin/ssh:/usr/bin/ssh'
+            args '-v /root/.m2:/root/.m2'
         }
     }
     stages {
