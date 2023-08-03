@@ -4,14 +4,19 @@ pipeline {
     }
     agent {
         docker {
-            image 'maven:3.9.3-eclipse-temurin-11'
+            image 'ubuntu:latest'
             args '-p 3000:3000'
-            args '-v /root/.m2:/root/.m2'
             // Add the following line to install openssh-client in the container
             //args 'apt-get update && apt-get install -y openssh-client'
         }
     }
     stages {
+        stage('Pre-Env'){
+            steps {
+                sh 'sudo apt-update'
+                sh 'sudo apt install default-jdk'
+            }
+        }
         stage('Build') {
             steps {
                 sh 'mvn -B -DskipTests clean package'
@@ -38,10 +43,6 @@ pipeline {
         }
         stage('Deploy') {
         agent {
-                docker {
-                    image 'ubuntu:latest'
-                    args '-p 3000:3000'
-                }
                 steps {
                     script {
                         withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-to-aws', keyFileVariable: 'SSH_KEY')]) {
