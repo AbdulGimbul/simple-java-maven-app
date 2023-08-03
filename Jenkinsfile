@@ -14,7 +14,7 @@ pipeline {
         stage('Pre-Env'){
             steps {
                 sh 'apt update'
-                sh 'apt install default-jdk'
+                sh 'apt install -y openjdk-11-jdk'
             }
         }
         stage('Build') {
