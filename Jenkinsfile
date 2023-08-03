@@ -41,7 +41,7 @@ pipeline {
                         // Start the SSH connection and execute the command
                      //   sh 'ssh -i $SSH_KEY app@ec2-13-229-99-205.ap-southeast-1.compute.amazonaws.com "ls"'
                     //}
-                    sh 'ssh app@ec2-13-229-99-205.ap-southeast-1.compute.amazonaws.com "ls"'
+                    sh 'ssh -i /root/.ssh/id_rsa app@ec2-13-229-99-205.ap-southeast-1.compute.amazonaws.com "ls"'
                 }
             }
         }
