@@ -36,18 +36,20 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sh 'cp ./jenkins/scripts/abdl_aws_key.pem $JENKINS_HOME/abdl_aws_key.pem'
-                sh 'chmod 400 ./jenkins/scripts/abdl_aws_key.pem'
-                script {
-                    def remote = [:]
-                    remote.name = 'app'
-                    remote.host = 'ec2-13-229-99-205.ap-southeast-1.compute.amazonaws.com'
-                    remote.user = 'app'
-                    remote.identityFile = '$JENKINS_HOME/abdl_aws_key.pem'
-                    remote.allowAnyHosts = true
+                    // Copy the abdl_aws_key.pem file into the Docker container
+                    docker.image('maven:3.9.3-eclipse-temurin-11').inside {
+                        sh 'cp ./jenkins/scripts/abdl_aws_key.pem ./abdl_aws_key.pem'
+                        sh 'chmod 400 ./abdl_aws_key.pem'
 
-                    sshCommand remote: remote, command: "ls"
-                }
+                        def remote = [:]
+                        remote.name = 'app'
+                        remote.host = 'ec2-13-229-99-205.ap-southeast-1.compute.amazonaws.com'
+                        remote.user = 'app'
+                        remote.identityFile = './abdl_aws_key.pem'
+                        remote.allowAnyHosts = true
+
+                        sshCommand remote: remote, command: "ls -lrt"
+                    }
             }
         }
     }
