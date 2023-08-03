@@ -39,7 +39,7 @@ pipeline {
                 script {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-to-aws', keyFileVariable: 'SSH_KEY')]) {
                         // Start the SSH connection and execute the command
-                        sh 'ssh -i "${SSH_KEY}" app@13.229.99.205 "ls"'
+                        sh 'ssh -i $SSH_KEY app@13.229.99.205 "ls"'
                     }
                 }
             }
