@@ -34,25 +34,17 @@ pipeline {
                 echo "Let's go"
             }
         }
-        //stage('Install SSH Client') {
-          //  steps {
-                // Install openssh-client package on the Jenkins agent node
-            //    sh 'apt-get update -y'
-              //  sh 'apt-get install -y openssh-client'
-            //}
-       // }
         stage('Deploy') {
             steps {
                 sh 'chmod 400 ./jenkins/scripts/abdl_aws_key.pem'
-                sshagent(credentials : ['jenkins-to-aws']){
-                sh '''
-                    ssh -o StrictHostKeyChecking=no \
-                        -i "./jenkins/scripts/abdl_aws_key.pem" \
-                        app@ec2-13-229-99-205.ap-southeast-1.compute.amazonaws.com \
-                        "bash -s" < ./jenkins/scripts/deploy.sh
-                '''
-                sleep 60
-                }
+                def remote = [:]
+                remote.name = 'app'
+                remote.host = 'ec2-13-229-99-205.ap-southeast-1.compute.amazonaws.com'
+                remote.user = 'app'
+                remote.identityFile = './jenkins/scripts/abdl_aws_key.pem'
+                remote.allowAnyHosts = true
+
+                sshCommand remote: remote, command: "ls"
             }
         }
     }
