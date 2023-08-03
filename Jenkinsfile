@@ -40,7 +40,7 @@ pipeline {
                 script {
                     def remoteDir = 'app' // Replace with your remote directory path
                     def jarFileName = 'target/*.jar' // Replace with your JAR file name
-                    def ec2PublicIp = 'ec2-13-229-99-205.ap-southeast-1.compute.amazonaws.com' // Replace with your EC2 instance public IP
+                    def ec2PublicIp = '13.229.99.205' // Replace with your EC2 instance public IP
 
                     // Restart the application on the EC2 instance (if a previous instance is running)
                     sshagent(credentials: ['jenkins-to-aws']) {
