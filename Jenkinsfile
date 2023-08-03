@@ -37,14 +37,16 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh 'chmod 400 ./jenkins/scripts/abdl_aws_key.pem'
-                def remote = [:]
-                remote.name = 'app'
-                remote.host = 'ec2-13-229-99-205.ap-southeast-1.compute.amazonaws.com'
-                remote.user = 'app'
-                remote.identityFile = './jenkins/scripts/abdl_aws_key.pem'
-                remote.allowAnyHosts = true
+                script {
+                    def remote = [:]
+                    remote.name = 'app'
+                    remote.host = 'ec2-13-229-99-205.ap-southeast-1.compute.amazonaws.com'
+                    remote.user = 'app'
+                    remote.identityFile = './jenkins/scripts/abdl_aws_key.pem'
+                    remote.allowAnyHosts = true
 
-                sshCommand remote: remote, command: "ls"
+                    sshCommand remote: remote, command: "ls -lrt"
+                }
             }
         }
     }
