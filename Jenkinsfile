@@ -41,13 +41,14 @@ pipeline {
                     def remoteDir = 'app' // Replace with your remote directory path
                     def jarPath = 'target/*.jar' // Replace with your JAR path
                     def jarFileName = '*.jar' // Replace with your JAR path
+                    def deployScript = 'deploy.sh'
                     def ec2PublicIp = '13.229.99.205' // Replace with your EC2 instance public IP
 
                     // Restart the application on the EC2 instance (if a previous instance is running)
                     sshagent(credentials: ['jenkins-to-aws']) {
                         // Copy the JAR file to the remote directory
-                        sh "scp -o StrictHostKeyChecking=no -i ./jenkins/scripts/abdl_aws_key.pem ${jarPath} app@${ec2PublicIp}:${remoteDir}/"
-                        sh "ssh -o StrictHostKeyChecking=no -i ./jenkins/scripts/abdl_aws_key.pem app@${ec2PublicIp} 'if pgrep -f ${jarFileName}; then pkill -f \\*.jar; fi && cd ${remoteDir} && java -jar ${jarFileName} &'"
+                        sh "scp -o StrictHostKeyChecking=no -i ./jenkins/scripts/abdl_aws_key.pem ${jarPath} ${deployScript} app@${ec2PublicIp}:${remoteDir}/"
+                        sh "ssh -o StrictHostKeyChecking=no -i ./jenkins/scripts/abdl_aws_key.pem app@${ec2PublicIp} 'bash ${remoteDir}/${deployScript}'"
                     }
                 }
             }
