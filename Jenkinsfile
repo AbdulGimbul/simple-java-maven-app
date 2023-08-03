@@ -37,15 +37,9 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Make sure to provide the correct path to the private key file
-                    def keyFilePath = './jenkins/scripts/abdl_aws_key.pem'
-
-                    // Start the SSH agent and add the private key to it
-                    sshagent(credentials: ['jenkins-to-aws']) {
-                        sh 'chmod 400 ' + keyFilePath
-
-                        // SSH connection and command execution
-                        sh "ssh -o StrictHostKeyChecking=no -i ${keyFilePath} app@ec2-13-229-99-205.ap-southeast-1.compute.amazonaws.com 'ls'"
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-to-aws', keyFileVariable: 'SSH_KEY')]) {
+                        // Start the SSH connection and execute the command
+                        sh "ssh -o StrictHostKeyChecking=no -i $SSH_KEY app@ec2-13-229-99-205.ap-southeast-1.compute.amazonaws.com 'ls'"
                     }
                 }
             }
