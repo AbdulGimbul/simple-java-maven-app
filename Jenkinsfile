@@ -40,7 +40,7 @@ pipeline {
         agent {
                 docker {
                     image 'ubuntu:latest'
-                    args '-p 3000:3000''
+                    args '-p 3000:3000'
                 }
                 steps {
                     script {
