@@ -6,6 +6,7 @@ pipeline {
         docker {
             image 'abdl00/maven-custom-image'
             args '-p 3000:3000'
+            args '-v /root/.m2:/root/.m2'
         }
     }
     stages {
