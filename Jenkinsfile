@@ -39,14 +39,15 @@ pipeline {
                 // Copy JAR file to EC2 instance using SCP
                 script {
                     def remoteDir = 'app' // Replace with your remote directory path
-                    def jarFileName = 'target/*.jar' // Replace with your JAR file name
+                    def jarPath = 'target/*.jar' // Replace with your JAR path
+                    def jarFileName = '*.jar' // Replace with your JAR path
                     def ec2PublicIp = '13.229.99.205' // Replace with your EC2 instance public IP
 
                     // Restart the application on the EC2 instance (if a previous instance is running)
                     sshagent(credentials: ['jenkins-to-aws']) {
                         // Copy the JAR file to the remote directory
-                        sh "scp -o StrictHostKeyChecking=no -i ./jenkins/scripts/abdl_aws_key.pem ${jarFileName} app@${ec2PublicIp}:${remoteDir}/"
-                        sh "ssh -o StrictHostKeyChecking=no -i ./jenkins/scripts/abdl_aws_key.pem app@${ec2PublicIp} 'if pgrep -f *.jar; then pkill -f *.jar; fi && cd ${remoteDir} && java -jar *.jar &'"
+                        sh "scp -o StrictHostKeyChecking=no -i ./jenkins/scripts/abdl_aws_key.pem ${jarPath} app@${ec2PublicIp}:${remoteDir}/"
+                        sh "ssh -o StrictHostKeyChecking=no -i ./jenkins/scripts/abdl_aws_key.pem app@${ec2PublicIp} 'if pgrep -f ${jarFileName}; then pkill -f ${jarFileName}; fi && cd ${remoteDir} && java -jar ${jarFileName} &'"
                     }
                 }
             }
