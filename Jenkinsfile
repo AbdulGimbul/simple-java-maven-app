@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Pre-Env'){
             steps {
-                sh 'apt-update'
+                sh 'apt update'
                 sh 'apt install default-jdk'
             }
         }
