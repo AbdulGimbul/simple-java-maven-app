@@ -13,8 +13,8 @@ pipeline {
     stages {
         stage('Pre-Env'){
             steps {
-                sh 'sudo apt-update'
-                sh 'sudo apt install default-jdk'
+                sh 'apt-update'
+                sh 'apt install default-jdk'
             }
         }
         stage('Build') {
