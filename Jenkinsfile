@@ -37,11 +37,9 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    //withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-to-aws', keyFileVariable: 'SSH_KEY')]) {
-                        // Start the SSH connection and execute the command
-                     //   sh 'ssh -i $SSH_KEY app@ec2-13-229-99-205.ap-southeast-1.compute.amazonaws.com "ls"'
-                    //}
-                    sh 'ssh -i /root/.ssh/id_rsa app@ec2-13-229-99-205.ap-southeast-1.compute.amazonaws.com "ls"'
+                    sshagent(credentials: ['jenkins-to-aws']) {
+                        sh "ssh -o StrictHostKeyChecking=no -i ./jenkins/scripts/abdl_aws_key.pem app@13.229.99.205 ls"
+                    }
                 }
             }
         }
