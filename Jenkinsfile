@@ -4,19 +4,11 @@ pipeline {
     }
     agent {
         docker {
-            image 'ubuntu:latest'
+            image 'abdl00/maven-custom-image'
             args '-p 3000:3000'
-            // Add the following line to install openssh-client in the container
-            //args 'apt-get update && apt-get install -y openssh-client'
         }
     }
     stages {
-        stage('Pre-Env'){
-            steps {
-                sh 'apt update'
-                sh 'apt install -y openjdk-11-jdk'
-            }
-        }
         stage('Build') {
             steps {
                 sh 'mvn -B -DskipTests clean package'
