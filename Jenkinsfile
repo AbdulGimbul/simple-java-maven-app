@@ -47,7 +47,7 @@ pipeline {
                     sshagent(credentials: ['jenkins-to-aws']) {
                         // Copy the JAR file to the remote directory
                         sh "scp -o StrictHostKeyChecking=no -i ./jenkins/scripts/abdl_aws_key.pem ${jarPath} app@${ec2PublicIp}:${remoteDir}/"
-                        sh "ssh -o StrictHostKeyChecking=no -i ./jenkins/scripts/abdl_aws_key.pem app@${ec2PublicIp} 'if pgrep -f ${jarFileName}; then pkill -f ${jarFileName}; fi && cd ${remoteDir} && java -jar ${jarFileName} &'"
+                        sh "ssh -o StrictHostKeyChecking=no -i ./jenkins/scripts/abdl_aws_key.pem app@${ec2PublicIp} 'if pgrep -f ${jarFileName}; then pkill -f \\*.jar; fi && cd ${remoteDir} && java -jar ${jarFileName} &'"
                     }
                 }
             }
