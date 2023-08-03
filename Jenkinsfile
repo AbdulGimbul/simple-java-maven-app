@@ -45,7 +45,7 @@ pipeline {
                     remote.identityFile = './jenkins/scripts/abdl_aws_key.pem'
                     remote.allowAnyHosts = true
 
-                    sshCommand remote: remote, command: "ls -lrt"
+                    sshCommand remote: remote, command: "ls"
                 }
             }
         }
