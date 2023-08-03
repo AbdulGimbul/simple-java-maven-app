@@ -42,7 +42,6 @@ pipeline {
             }
         }
         stage('Deploy') {
-        agent {
                 steps {
                     script {
                         withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-to-aws', keyFileVariable: 'SSH_KEY')]) {
@@ -51,7 +50,6 @@ pipeline {
                         }
                     }
                 }
-            }
         }
     }
 }
