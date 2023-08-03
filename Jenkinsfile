@@ -37,11 +37,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    //withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-to-aws', keyFileVariable: 'SSH_KEY')]) {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-to-aws', keyFileVariable: 'SSH_KEY')]) {
                         // Start the SSH connection and execute the command
-                      //  sh 'ssh -i "$SSH_KEY" app@ec2-13-229-99-205.ap-southeast-1.compute.amazonaws.com "ls"'
-                    //}
-                    sh 'ssh -i "abdl_aws_key.pem" app@13.229.99.205 "ls"'
+                        sh 'ssh -i "$SSH_KEY" app@13.229.99.205 "ls"'
+                    }
                 }
             }
         }
