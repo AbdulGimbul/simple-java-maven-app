@@ -40,7 +40,6 @@ pipeline {
                 script {
                     def remoteDir = 'app' // Replace with your remote directory path
                     def jarPath = 'target/*.jar' // Replace with your JAR path
-                    def jarFileName = '*.jar' // Replace with your JAR path
                     def deployPath = 'jenkins/scripts/deploy.sh'
                     def deployScript = 'deploy.sh'
                     def ec2PublicIp = '13.229.99.205' // Replace with your EC2 instance public IP

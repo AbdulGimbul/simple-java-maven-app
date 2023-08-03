@@ -1,6 +1,6 @@
 #!/bin/bash
-if pgrep -f *.jar; then
-    pkill -f *.jar
+if pgrep -f my-app-1.0-SNAPSHOT.jar.jar; then
+    pkill -f my-app-1.0-SNAPSHOT.jar.jar
 fi
 cd app
-java -jar *.jar &
+java -jar my-app-1.0-SNAPSHOT.jar.jar &
