@@ -39,7 +39,7 @@ pipeline {
                 script {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-to-aws', keyFileVariable: 'SSH_KEY')]) {
                         // Start the SSH connection and execute the command
-                        sh "ssh -o StrictHostKeyChecking=no -i $SSH_KEY app@ec2-13-229-99-205.ap-southeast-1.compute.amazonaws.com 'ls'"
+                        sh 'ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" app@ec2-13-229-99-205.ap-southeast-1.compute.amazonaws.com "ls"'
                     }
                 }
             }
