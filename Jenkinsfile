@@ -27,7 +27,7 @@ pipeline {
         }
         stage('Manual Approval') {
             input {
-                message "Lanjutkan ke deploy?"
+                message "Lanjutkan ke tahap Deploy?"
                 ok "Yes, of course"
             }
             steps {
@@ -36,20 +36,18 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                // Copy JAR file to EC2 instance using SCP
                 script {
-                    def remoteDir = 'app' // Replace with your remote directory path
-                    def jarPath = 'target/*.jar' // Replace with your JAR path
+                    def remoteDir = 'app'
+                    def jarPath = 'target/*.jar'
                     def deployPath = 'jenkins/scripts/deploy.sh'
                     def deployScript = 'deploy.sh'
-                    def ec2PublicIp = '13.229.99.205' // Replace with your EC2 instance public IP
+                    def ec2PublicIp = '13.229.99.205'
 
-                    // Restart the application on the EC2 instance (if a previous instance is running)
                     sshagent(credentials: ['jenkins-to-aws']) {
-                        // Copy the JAR file to the remote directory
                         sh "scp -o StrictHostKeyChecking=no -i ./jenkins/scripts/abdl_aws_key.pem ${jarPath} ${deployPath} app@${ec2PublicIp}:${remoteDir}/"
                         sh "ssh -o StrictHostKeyChecking=no -i ./jenkins/scripts/abdl_aws_key.pem app@${ec2PublicIp} 'bash ${remoteDir}/${deployScript}'"
                     }
+                    sleep 60
                 }
             }
         }
